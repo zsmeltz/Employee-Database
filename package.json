@@ -1,0 +1,24 @@
+{
+  "name": "zs-employeedb-hw",
+  "version": "1.0.0",
+  "description": "",
+  "main": "db.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zsmeltz/zs-employeedb-hw.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zsmeltz/zs-employeedb-hw/issues"
+  },
+  "homepage": "https://github.com/zsmeltz/zs-employeedb-hw#readme",
+  "dependencies": {
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1",
+    "node": "^15.0.1"
+  }
+}
