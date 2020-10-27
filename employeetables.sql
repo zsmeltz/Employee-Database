@@ -23,6 +23,10 @@ CREATE TABLE emp_role (
     FOREIGN KEY (dep_id) REFERENCES department (id)
 );
 
+INSERT INTO emp_role (title, salary, dept_id)
+VALUES ("Lead Engineer", 170000, 1), ("Software Engineer", 100000, 1), ("Sales Lead", 68000, 2), ("Salesperson", 40000, 2), ("Finance Manager", 130000, 3), ("Accountant", 60000, 3),
+("Legal Team Lead", 130000, 4), ("Lawyer", 70000, 4);
+
 CREATE TABLE employee (
     id INT NOT NULL AUTO_INCREMENT,
     PRIMARY KEY (id),
@@ -31,3 +35,6 @@ CREATE TABLE employee (
     role_id INT NOT NULL,
     FOREIGN KEY (role_id) REFERENCES emp_role(id)
 );
+
+INSERT INTO employee (first_name, last_name, role_id)
+VALUES ("Jerry", "Smith", 1), ("Mary", "Hopkins", 2), ("Erin", "Finkleburg", 3), ("Aaron", "Yoigami", 4);
