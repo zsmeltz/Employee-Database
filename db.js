@@ -33,9 +33,9 @@ function initialPrompt(){
     inquirer.prompt(options).then(function(res, err) {
         if(err) throw err;
 
-        if(res === options.choices[11]){
+        if(res === "EXIT"){
             console.clear();
         }
         
     })
-}
+};

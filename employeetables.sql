@@ -10,6 +10,10 @@ CREATE TABLE department (
     dep_name VARCHAR(30) NULL
 );
 
+INSERT INTO department (dep_name)
+VALUES ("Engineering"), ("Sales"), ("Finances"), ("Legal");
+
+
 CREATE TABLE emp_role (
     id INT NOT NULL AUTO_INCREMENT,
     PRIMARY KEY (id),
