@@ -13,6 +13,7 @@ CREATE TABLE department (
 INSERT INTO department (dep_name)
 VALUES ("Engineering"), ("Sales"), ("Finances"), ("Legal");
 
+SELECT * FROM department;
 
 CREATE TABLE emp_role (
     id INT NOT NULL AUTO_INCREMENT,
@@ -22,6 +23,8 @@ CREATE TABLE emp_role (
     dept_id INT NOT NULL,
     FOREIGN KEY (dep_id) REFERENCES department (id)
 );
+
+SELECT * FROM emp_role;
 
 INSERT INTO emp_role (title, salary, dept_id)
 VALUES ("Lead Engineer", 170000, 1), ("Software Engineer", 100000, 1), ("Sales Lead", 68000, 2), ("Salesperson", 40000, 2), ("Finance Manager", 130000, 3), ("Accountant", 60000, 3),
@@ -35,6 +38,8 @@ CREATE TABLE employee (
     role_id INT NOT NULL,
     FOREIGN KEY (role_id) REFERENCES emp_role(id)
 );
+
+SELECT * FROM employee;
 
 INSERT INTO employee (first_name, last_name, role_id)
 VALUES ("Jerry", "Smith", 1), ("Mary", "Hopkins", 2), ("Erin", "Finkleburg", 3), ("Aaron", "Yoigami", 4);

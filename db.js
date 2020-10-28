@@ -6,7 +6,7 @@ var consoleTable = require('console.table');
 //     host: 'localhost',
 //     port: 3306,
 //     user: "root",
-//     password: "",
+//     password: "password",
 //     database: "employeesDB"
 //   });
 
@@ -156,20 +156,99 @@ function configEmployee(res){
 };
 
 function update(res){
-    //"Update employee role", "Update employee manager"
     if(res === "Update employee role"){
 //prompts and asks which employee, asks what role it wants to change it to. responds with confirmation of role update
+        inquirer
+            prompt = [
+                {
+                    type: "list",
+                    message: "Which employee?",
+                    choices: [],
+                    name: 'employeeSelect'
+                },
+                {
+                    type: 'list',
+                    message: "What would you like to change their role to?"
+                    choices: [],
+                    name: 'updateRole'
+                }
+            ].then(function(err, res){
+                if (err) throw err;
+                console.log("Successfully updated employee role");
+                //UPDATES that employees role to a different role
+
+            });
     }
     if(res === "Update employee manager"){
 //prompts and asks which employee, asks which manager it would like to switch to, responds with confirmation of manager update
+        inquirer
+            prompt = [
+                {
+                    type: "list",
+                    message: "Which employee would you like to have a different manager?",
+                    choices: [],
+                    name: 'employeeSelect'
+                },
+                {
+                    type: 'list',
+                    message: "Which manager would you like to switch to?",
+                    choices: [],
+                    name: 'managerSelect'
+                },
+                {
+                    type: 'confirm',
+                    message: "Are you sure you want to make these changes?",
+                    name: 'confirmChange'
+                }
+            ].then(function(err, res){
+                if (err) throw err;
+                
+            })
     }
 };
 
 function configRole(res){
     if(res === "Add role"){
 //prompts for an input of name of new role, input of salary, and gives a list and asks which department it will belong to
+        inquirer
+            prompt = [
+                {
+                    type: "input",
+                    message: "Enter new role name: ",
+                    name: 'newRoleName'
+                },
+                {
+                    type: "input",
+                    message: "Enter new role salary: ",
+                    name: 'newRoleSalary'
+                },
+                {
+                    type: 'list',
+                    message: "Which department would you like to add this role to?",
+                    name: 'addToDepartment'
+                }
+            ].then(function(err, res){
+                if (err) throw err;
+            })
     }
     if(res === "Remove role"){
 //asks if the user is sure it wants to delete a row. If yes, deletes a role row and responds with confirmation. if no, returns back to main menu
+        inquirer
+            prompt = [
+                {
+                    type: 'list',
+                    message: "Which role do you want to remove?",
+                    choices: [],
+                    name: 'roleSelection'
+                },
+                {
+                    type: 'confirm',
+                    message: 'Are you sure you want to remove this role?',
+                    name: 'removeConfirm'
+                }
+            ].then(function(err, res) {
+                if (err) throw err;
+
+            })
     }
 };
