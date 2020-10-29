@@ -18,6 +18,7 @@
   "homepage": "https://github.com/zsmeltz/zs-employeedb-hw#readme",
   "dependencies": {
     "console.table": "^0.10.0",
+    "express": "^4.17.1",
     "inquirer": "^7.3.3",
     "mysql": "^2.18.1",
     "node": "^15.0.1"

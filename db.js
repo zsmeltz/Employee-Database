@@ -1,29 +1,35 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
 var consoleTable = require('console.table');
+var express = require('express');
 
-// var connection = mysql.createConnection({
-//     host: 'localhost',
-//     port: 3306,
-//     user: "root",
-//     password: "password",
-//     database: "employeesDB"
-//   });
+var app = express();
+var connection = mysql.createConnection({
+    host: 'localhost',
+    port: 3306,
+    user: "root",
+    password: "password",
+    database: "employeesDB"
+  });
 
-//   connection.connect(function(err){
-//       if(err) throw err;
-//       console.log("Connected as id " + connection.threadId + "\n");
-//   });
+var PORT = process.env.PORT || "3306";
+
+  connection.connect(function(err){
+      if(err) throw err;
+      console.log("Connected as id " + connection.threadId + "\n");
+  });
 
 initialPrompt();
 
 function initialPrompt(){
+
     var options = {
         type: "list",
         message: "What would you like to do?",
         choices: ["View all employees", "View all employees by department", "View all employees by manager", "Add employee", "Remove employee", "Update employee role", "Update employee manager", "View all roles", "View all departments", "Add role", "Remove role", "EXIT"],
         name: "Option Menu"
     };
+
     inquirer.prompt(options).then(function(err, res) {
         if(err) throw err;
 
@@ -49,11 +55,13 @@ function initialPrompt(){
     });
 };
 
-function readTable(res){
+async function readTable(res){
 //connection.query("SELECT * FROM employee")
     console.log(res);
     if(res === "View all employees"){
 //displays the table with all employees
+//app.get('/employee',)
+//connection.query("SELECT * FROM employee");
     }
     if(res === "View all employees by department"){
 //prompt and ask which department, then view all employees under that dept
@@ -67,7 +75,7 @@ function readTable(res){
                 if (err) throw err;
 
                 if(res === "Engineering"){
-
+                    
                 }
                 if(res === "Sales"){
                     
@@ -82,8 +90,10 @@ function readTable(res){
     }
 
     if(res === "View all employees by manager"){
+
 //prompt and ask which manager, then view all employees under that manager
-        inquirer
+        
+         inquirer
             prompt = [{
                 type: 'list',
                 message: 'Which manager?',
@@ -97,10 +107,19 @@ function readTable(res){
    
     if(res === "View all roles"){
  //views all the roles via table
+ app.get('/', function(req, res){
+     connection.query("SELECT * FROM emp_role", function(err, result){
+         if (err) throw err;
+         console.log(consoleTable(result));
+     })
+ })
     }
 
     if(res === "View all departments"){
-//views all departments via table
+        connection.query("SELECT * FROM department", function(err, result){
+            if (err) throw err;
+            console.log(consoleTable(result));
+        })
     }
 
 };
@@ -113,24 +132,25 @@ function configEmployee(res){
                 {
                     type: "input",
                     message: "New employee first name?",
-                    name: "firstName"
+                    name: "first_name"
                 },
                 {
                     type: "input",
                     message: "New employee last name?",
-                    name: "lastName"
+                    name: "last_name"
                 },
                 {
                     type: 'list',
                     message: "New employee role: ",
                     choices: ["Lead Engineer", "Software Engineer", "Sales Lead", "Salesperson", "Finance Manager", "Accountant", "Legal Team Lead", "Lawyer"],
-                    name: "newEmployeeRole"
+                    name: "role_id"
                 }
             ].then(function(err, res){
                 if (err) throw err;
+                connection.query("INSERT INTO employee (first_name, last_name, role_id) VALUES (?)", [res.first_name, res.last_name, res.role_id], (err) => {if(err) throw err});
                 console.log("Your new employee has been saved.")
                 //adds the combination of inputs to a single object and adds to table
-            });
+            }).catch(err=>{console.log(err)})
     };
 
     if(res === 'Remove employee'){
@@ -149,26 +169,30 @@ function configEmployee(res){
         ].then(function(err, res){
             if(err) throw err;
             //deletes a row from employee based on the one they chose to delete
-        })
+        }).catch(err=>{console.log(err)})
     }
 
 
 };
 
-function update(res){
+async function update(res){
     if(res === "Update employee role"){
+        let choices = await connection.query("select firstname,lastname from employee", function(err, resp) {
+           console.log(resp) 
+           return resp;
+        })
 //prompts and asks which employee, asks what role it wants to change it to. responds with confirmation of role update
         inquirer
             prompt = [
                 {
                     type: "list",
                     message: "Which employee?",
-                    choices: [],
+                    choices: [choices],
                     name: 'employeeSelect'
                 },
                 {
                     type: 'list',
-                    message: "What would you like to change their role to?"
+                    message: "What would you like to change their role to?",
                     choices: [],
                     name: 'updateRole'
                 }
@@ -177,7 +201,7 @@ function update(res){
                 console.log("Successfully updated employee role");
                 //UPDATES that employees role to a different role
 
-            });
+            }).catch(err=>{console.log(err)})
     }
     if(res === "Update employee manager"){
 //prompts and asks which employee, asks which manager it would like to switch to, responds with confirmation of manager update
@@ -203,7 +227,7 @@ function update(res){
             ].then(function(err, res){
                 if (err) throw err;
                 
-            })
+            }).catch(err=>{console.log(err)})
     }
 };
 
@@ -229,7 +253,7 @@ function configRole(res){
                 }
             ].then(function(err, res){
                 if (err) throw err;
-            })
+            }).catch(err=>{console.log(err)})
     }
     if(res === "Remove role"){
 //asks if the user is sure it wants to delete a row. If yes, deletes a role row and responds with confirmation. if no, returns back to main menu
@@ -249,6 +273,10 @@ function configRole(res){
             ].then(function(err, res) {
                 if (err) throw err;
 
-            })
+            }).catch(err=>{console.log(err)})
     }
 };
+
+app.listen(PORT, function() {
+    console.log("Server listening on: http://localhost:" + PORT);
+  });
